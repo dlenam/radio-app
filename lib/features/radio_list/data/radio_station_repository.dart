@@ -1,5 +1,5 @@
-import 'package:radio_app/features/radios_list/data/radio_station_api_client.dart';
-import 'package:radio_app/features/radios_list/model/radio_station.dart';
+import 'package:radio_app/features/radio_list/data/radio_station_api_client.dart';
+import 'package:radio_app/features/radio_list/model/radio_station.dart';
 
 class RadioStationRepository {
   final RadioStationApiClient _radioStationApiClient;

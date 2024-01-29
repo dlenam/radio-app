@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:radio_app/features/radios_list/data/radio_station_repository.dart';
-import 'package:radio_app/features/radios_list/model/radio_station.dart';
+import 'package:radio_app/features/radio_list/data/radio_station_repository.dart';
+import 'package:radio_app/features/radio_list/model/radio_station.dart';
 
 class RadioStationListCubit extends Cubit<RadioListState> {
   final RadioStationRepository _radioStationRepository;

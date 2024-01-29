@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get_it/get_it.dart';
-import 'package:radio_app/features/radios_list/cubit/radio_list_cubit.dart';
+import 'package:radio_app/features/radio_list/cubit/radio_list_cubit.dart';
 
 class RadioListScreen extends StatelessWidget {
   const RadioListScreen({super.key});

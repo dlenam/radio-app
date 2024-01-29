@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
-import 'package:radio_app/features/radios_list/view/radio_list_view.dart';
+import 'package:radio_app/features/radio_list/view/radio_list_view.dart';
 import 'package:radio_app/routes/custom_page_routes.dart';
 
 const _fadeInLogoTime = Duration(seconds: 2);

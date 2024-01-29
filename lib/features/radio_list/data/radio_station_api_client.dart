@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:radio_app/features/radios_list/model/radio_station.dart';
+import 'package:radio_app/features/radio_list/model/radio_station.dart';
 
 const _radioAPIUrl = '65.109.136.86';
 
