@@ -19,7 +19,7 @@ class RadioStationListCubit extends Cubit<RadioListState> {
     final results = await Future.wait([
       _radioStationRepository.loadMoreAndGetRadioStations(),
       // Fake duration to see the loader
-      Future.delayed(const Duration(seconds: 2))
+      Future.delayed(const Duration(seconds: 1))
     ]);
     emit(RadioListState.loaded(radioList: results[0]));
   }
