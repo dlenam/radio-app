@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:radio_app/features/radio_player.dart';
+import 'package:radio_app/features/radios_list/view/radio_list_view.dart';
 
 const _fadeInLogoTime = Duration(seconds: 2);
 const _splashTime = Duration(seconds: 4);
@@ -27,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(_splashTime, () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const RadioPlayerScreen()),
+        MaterialPageRoute(builder: (_) => const RadioListScreen()),
       );
     });
   }
@@ -61,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen>
           children: [
             FadeTransition(
               opacity: fadeAnimator,
-              child: Icon(
+              child: const Icon(
                 Icons.radio,
                 color: Colors.white,
                 size: 80,
