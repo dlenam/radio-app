@@ -43,6 +43,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   http: ^0.13.6
   lottie: ^2.3.2
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:

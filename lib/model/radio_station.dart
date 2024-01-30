@@ -1,6 +1,6 @@
 class RadioStation {
   final String id;
-  final String name;
+  final String? name;
   final String country;
   final String streamUrl;
   final String iconUrl;
@@ -15,7 +15,9 @@ class RadioStation {
 
   factory RadioStation.fromApiJson(Map<String, dynamic> json) => RadioStation._(
         id: json['stationuuid'],
-        name: json['name'],
+        name: json['name'] != null && (json['name'] as String).trim() != ''
+            ? (json['name'] as String).trim()
+            : null,
         country: json['countrycode'],
         streamUrl: json['url'],
         iconUrl: json['favicon'],

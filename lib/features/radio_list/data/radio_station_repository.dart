@@ -1,10 +1,11 @@
-import 'package:radio_app/features/radio_list/data/radio_station_api_client.dart';
-import 'package:radio_app/features/radio_list/model/radio_station.dart';
+import 'package:radio_app/features/radio_list/data/radio_station_data_source.dart';
+import 'package:radio_app/model/radio_station.dart';
 
 class RadioStationRepository {
-  final RadioStationApiClient _radioStationApiClient;
+  final RadioStationDataSource _radioStationApiClient;
 
-  RadioStationRepository({required RadioStationApiClient radioStationApiClient})
+  RadioStationRepository(
+      {required RadioStationDataSource radioStationApiClient})
       : _radioStationApiClient = radioStationApiClient;
 
   final int _stationsBatchAmount = 15;

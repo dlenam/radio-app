@@ -182,3 +182,45 @@ void showSliderDialog({
 }
 
 T? ambiguate<T>(T? value) => value;
+
+class RoundedCornerImage extends StatelessWidget {
+  final String imageUrl;
+  final double radius;
+  const RoundedCornerImage({
+    super.key,
+    required this.imageUrl,
+    this.radius = 20,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius), // Image border
+      child: imageUrl.contains('https')
+          ? Image.network(
+              imageUrl,
+              loadingBuilder: (context, child, loadingProgress) =>
+                  loadingProgress == null
+                      ? child
+                      : const CircularProgressIndicator(),
+              errorBuilder: (context, child, loadingProgress) =>
+                  const MissingImageIcon(),
+              fit: BoxFit.cover,
+            )
+          : const MissingImageIcon(),
+    );
+  }
+}
+
+class MissingImageIcon extends StatelessWidget {
+  const MissingImageIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.error_outline,
+      color: Colors.red,
+      size: 50,
+    );
+  }
+}

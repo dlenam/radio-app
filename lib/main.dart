@@ -1,12 +1,15 @@
 import 'dart:io';
 
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:just_audio/just_audio.dart';
 import 'package:radio_app/features/radio_list/cubit/radio_list_cubit.dart';
-import 'package:radio_app/features/radio_list/data/radio_station_api_client.dart';
+import 'package:radio_app/features/radio_list/data/radio_station_data_source.dart';
 import 'package:radio_app/features/radio_list/data/radio_station_repository.dart';
+import 'package:radio_app/features/radio_player/cubit/radio_player_cubit.dart';
 import 'package:radio_app/features/splash_screen.dart';
 
 void main() {
@@ -31,17 +34,20 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-void setupDependencies() {
+void setupDependencies() async {
   // Fixes CERTIFICATE_VERIFY_FAILED error while in development
   HttpOverrides.global = MyHttpOverrides();
 
   final getIt = GetIt.instance;
-  final radioStationApiClient = RadioStationApiClient(http.Client());
+  final radioStationApiClient = RadioStationDataSource(http.Client());
   final radioStationRepository =
       RadioStationRepository(radioStationApiClient: radioStationApiClient);
 
   getIt.registerLazySingleton<RadioStationListCubit>(() =>
       RadioStationListCubit(radioStationRepository: radioStationRepository));
+
+  getIt.registerFactory<RadioPlayerCubit>(() => RadioPlayerCubit(
+      audioSessionGetter: () => AudioSession.instance, player: AudioPlayer()));
 }
 
 class MyHttpOverrides extends HttpOverrides {

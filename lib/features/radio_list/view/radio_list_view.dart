@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get_it/get_it.dart';
+import 'package:radio_app/common_ui/widgets.dart';
 import 'package:radio_app/features/radio_list/cubit/radio_list_cubit.dart';
+import 'package:radio_app/features/radio_player/view/radio_player_screen.dart';
+import 'package:radio_app/routes/custom_page_routes.dart';
 
 class RadioListScreen extends StatelessWidget {
   const RadioListScreen({super.key});
@@ -45,7 +48,11 @@ class _RadioListViewState extends State<RadioListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Radios')),
+      appBar: AppBar(
+          title: const Text(
+        'Radios',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      )),
       body: BlocBuilder<RadioStationListCubit, RadioListState>(
         builder: (context, state) {
           switch (state.status) {
@@ -58,7 +65,7 @@ class _RadioListViewState extends State<RadioListView> {
               EasyLoading.dismiss();
               break;
             case RadioListStatus.error:
-              // TODO: Handle this case.
+              // TODO: display some snackbar
               break;
           }
           return Padding(
@@ -71,24 +78,17 @@ class _RadioListViewState extends State<RadioListView> {
                 final radioStation = state.radioList[index];
                 return Card(
                   child: ListTile(
-                    leading: CircleAvatar(
-                      child: Image.network(
-                        radioStation.iconUrl,
-                        errorBuilder: (context, child, loadingProgress) =>
-                            const Icon(
-                          Icons.error_outline,
-                          color: Colors.purple,
-                        ),
-                      ),
-                    ),
+                    contentPadding: const EdgeInsets.all(12),
+                    onTap: () => Navigator.of(context).push(
+                        bottomToTopTransitionPage(
+                            RadioPlayerScreen(station: radioStation))),
+                    leading: RoundedCornerImage(
+                        imageUrl: radioStation.iconUrl, radius: 10),
                     title: Text(
-                      radioStation.name,
+                      radioStation.name ?? 'Unknown station',
                       overflow: TextOverflow.ellipsis,
                     ),
-                    trailing: const Icon(
-                      Icons.star_border_rounded,
-                      size: 40,
-                    ),
+                    trailing: const Icon(Icons.star_border_rounded, size: 40),
                   ),
                 );
               },
