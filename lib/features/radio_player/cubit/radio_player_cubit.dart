@@ -5,12 +5,12 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-
-typedef AudioSessioGetter = Future<AudioSession> Function();
+import 'package:radio_app/features/radio_player/data/radio_volume_repository.dart';
 
 class RadioPlayerCubit extends Cubit<RadioPlayerState> {
-  final AudioSessioGetter _audioSessionGetter;
-  final AudioPlayer _player;
+  final AudioSession _audioSession;
+  final AudioPlayer _audioPlayer;
+  final RadioVolumeRepository _radioVolumeRepository;
 
   late StreamSubscription _errorSubscription;
   late StreamSubscription _mainPlayerSubscription;
@@ -18,28 +18,46 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
   late StreamSubscription _volumeSubscription;
 
   RadioPlayerCubit({
-    required AudioSessioGetter audioSessionGetter,
-    required AudioPlayer player,
-  })  : _audioSessionGetter = audioSessionGetter,
-        _player = player,
-        super(const RadioPlayerState(
-          type: RadioPlayerStateType.loading,
-          volume: null,
-        ));
+    required RadioVolumeRepository radioVolumeRepository,
+    required AudioSession audioSession,
+    required AudioPlayer audioPlayer,
+  })  : _radioVolumeRepository = radioVolumeRepository,
+        _audioSession = audioSession,
+        _audioPlayer = audioPlayer,
+        super(
+          const RadioPlayerState(
+            type: RadioPlayerStateType.loading,
+            volume: null,
+          ),
+        );
 
   void startStreaming(String streamUrl) async {
     try {
-      final audioSession = await _audioSessionGetter();
-      await audioSession.configure(const AudioSessionConfiguration.speech());
-      await _player.setAudioSource(AudioSource.uri(Uri.parse(streamUrl)));
-
-      _errorSubscription = _startErrorListener(_player);
-      _metadataSubscription = _startMetadataListener(_player);
-      _mainPlayerSubscription = _startPlayerStateListener(_player);
-      _volumeSubscription = _startVolumeListener(_player);
+      await _configureRadio(
+        streamUrl: streamUrl,
+        audioPlayer: _audioPlayer,
+        audioSession: _audioSession,
+      );
+      _errorSubscription = _startErrorListener(_audioPlayer);
+      _metadataSubscription = _startMetadataListener(_audioPlayer);
+      _mainPlayerSubscription = _startPlayerStateListener(_audioPlayer);
+      _volumeSubscription = _startVolumeListener(_audioPlayer);
     } on Exception catch (e) {
       print('Some error happened with the player $e');
       emit(state.copyWith(type: RadioPlayerStateType.error));
+    }
+  }
+
+  Future<void> _configureRadio({
+    required String streamUrl,
+    required AudioSession audioSession,
+    required AudioPlayer audioPlayer,
+  }) async {
+    await audioSession.configure(const AudioSessionConfiguration.speech());
+    await audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(streamUrl)));
+    final initialVolume = _radioVolumeRepository.getVolume();
+    if (initialVolume != null) {
+      audioPlayer.setVolume(initialVolume);
     }
   }
 
@@ -84,15 +102,16 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
       });
 
   void volumeChanged(double value) {
-    _player.setVolume(value);
+    _audioPlayer.setVolume(value);
+    _radioVolumeRepository.storeVolume(value);
   }
 
   void pause() {
-    _player.pause();
+    _audioPlayer.pause();
   }
 
   void play() {
-    _player.play();
+    _audioPlayer.play();
   }
 
   @override
@@ -101,7 +120,7 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
     _mainPlayerSubscription.cancel();
     _metadataSubscription.cancel();
     _volumeSubscription.cancel();
-    _player.dispose();
+    _audioPlayer.dispose();
     await super.close();
   }
 }

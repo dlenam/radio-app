@@ -5,10 +5,10 @@ import 'package:radio_app/model/radio_station.dart';
 
 const _radioAPIUrl = '65.109.136.86';
 
-class RadioStationDataSource {
+class RadioStationApiDataSource {
   final Client http;
 
-  const RadioStationDataSource(this.http);
+  const RadioStationApiDataSource(this.http);
 
   Future<List<RadioStation>> getRadios(
       {required int offset, int limit = 10}) async {
