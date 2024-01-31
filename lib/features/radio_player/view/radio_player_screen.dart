@@ -43,7 +43,7 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> {
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
-              child: RoundedCornerImage(imageUrl: widget.station.iconUrl),
+              child: CustomeNetworkImage(imageUrl: widget.station.iconUrl),
             ),
             Expanded(child: AudioPlayer(streamUrl: widget.station.streamUrl)),
           ],

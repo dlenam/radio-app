@@ -82,13 +82,17 @@ class _RadioListViewState extends State<RadioListView> {
                     onTap: () => Navigator.of(context).push(
                         bottomToTopTransitionPage(
                             RadioPlayerScreen(station: radioStation))),
-                    leading: RoundedCornerImage(
+                    leading: CustomeNetworkImage(
                         imageUrl: radioStation.iconUrl, radius: 10),
                     title: Text(
                       radioStation.name ?? 'Unknown station',
                       overflow: TextOverflow.ellipsis,
                     ),
-                    trailing: const Icon(Icons.star_border_rounded, size: 40),
+                    trailing: const Icon(
+                      Icons.star_border_rounded,
+                      size: 40,
+                      color: Colors.black,
+                    ),
                   ),
                 );
               },

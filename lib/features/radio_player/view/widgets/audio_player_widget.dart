@@ -93,14 +93,14 @@ class _AudioPlayerButton extends StatelessWidget {
         );
       case RadioPlayerStateType.playing:
         return IconButton(
-          icon: const Icon(Icons.pause),
+          icon: const Icon(Icons.pause_circle),
           iconSize: 64.0,
           onPressed: () => context.read<RadioPlayerCubit>().pause(),
         );
       case RadioPlayerStateType.stopped:
       case RadioPlayerStateType.error:
         return IconButton(
-          icon: const Icon(Icons.play_arrow),
+          icon: const Icon(Icons.play_arrow_rounded),
           iconSize: 64.0,
           onPressed: () => context.read<RadioPlayerCubit>().play(),
         );
