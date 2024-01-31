@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:radio_app/features/radio_player/cubit/radio_player_cubit.dart';
+import 'package:radio_app/theme.dart';
 
 class AudioPlayer extends StatelessWidget {
   final String streamUrl;
@@ -49,29 +50,83 @@ class _AudioPlayerViewState extends State<_AudioPlayerView>
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RadioPlayerCubit, RadioPlayerState>(
+    return BlocListener<RadioPlayerCubit, RadioPlayerState>(
       listener: (context, state) {
         // TODO: do something about the errors
       },
-      builder: (context, state) {
-        return SizedBox(
-          width: double.maxFinite,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(child: _AudioPlayerButton(state.type)),
-              const SizedBox(height: 50),
-              SizedBox(
-                height: 100,
-                child: state.radioMetadataTitle != null
-                    ? _AudioMetadataTitle(title: state.radioMetadataTitle!)
-                    : Container(),
-              )
-            ],
+      child: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: BlocBuilder<RadioPlayerCubit, RadioPlayerState>(
+                buildWhen: (previous, current) => previous.type != current.type,
+                builder: (_, state) => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _AudioPlayerButton(state.type),
+                  ],
+                ),
+              ),
+            ),
+            BlocBuilder<RadioPlayerCubit, RadioPlayerState>(
+              buildWhen: (previous, current) =>
+                  previous.volume != current.volume,
+              builder: (context, state) => _VolumeSlider(
+                value: state.volume,
+                onChanged: context.read<RadioPlayerCubit>().volumeChanged,
+              ),
+            ),
+            const SizedBox(height: 50),
+            SizedBox(
+              height: 100,
+              child: BlocBuilder<RadioPlayerCubit, RadioPlayerState>(
+                buildWhen: (previous, current) =>
+                    previous.radioMetadataTitle != current.radioMetadataTitle,
+                builder: (_, state) {
+                  return state.radioMetadataTitle != null
+                      ? _AudioMetadataTitle(title: state.radioMetadataTitle!)
+                      : Container();
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _VolumeSlider extends StatelessWidget {
+  final double? value;
+  final Function(double) onChanged;
+
+  const _VolumeSlider({
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (value == null) {
+      return Container();
+    }
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        const Icon(Icons.volume_up_rounded, size: 40),
+        Expanded(
+          child: Slider(
+            min: 0,
+            max: 1,
+            value: value!,
+            onChanged: onChanged,
+            activeColor: primaryColor,
           ),
-        );
-      },
+        )
+      ],
     );
   }
 }
@@ -89,13 +144,14 @@ class _AudioPlayerButton extends StatelessWidget {
           margin: const EdgeInsets.all(8.0),
           width: 64.0,
           height: 64.0,
-          child: const CircularProgressIndicator(),
+          child: const CircularProgressIndicator(color: primaryColor),
         );
       case RadioPlayerStateType.playing:
         return IconButton(
           icon: const Icon(Icons.pause_circle),
           iconSize: 64.0,
-          onPressed: () => context.read<RadioPlayerCubit>().pause(),
+          onPressed: context.read<RadioPlayerCubit>().pause,
+          color: primaryColor,
         );
       case RadioPlayerStateType.stopped:
       case RadioPlayerStateType.error:
@@ -103,6 +159,7 @@ class _AudioPlayerButton extends StatelessWidget {
           icon: const Icon(Icons.play_arrow_rounded),
           iconSize: 64.0,
           onPressed: () => context.read<RadioPlayerCubit>().play(),
+          color: primaryColor,
         );
     }
   }

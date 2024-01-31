@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:radio_app/features/radio_list/view/radio_list_view.dart';
 import 'package:radio_app/routes/custom_page_routes.dart';
+import 'package:radio_app/theme.dart';
 
 const _fadeInLogoTime = Duration(seconds: 2);
 const _splashTime = Duration(seconds: 4);
@@ -44,14 +45,16 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final fadeAnimator =
-        CurvedAnimation(parent: animationController, curve: Curves.easeInCubic);
     return Scaffold(
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.purple, Colors.white, Colors.purple],
+            colors: [
+              primaryColor,
+              secondaryColor,
+              primaryColor,
+            ],
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
           ),
@@ -59,30 +62,11 @@ class _SplashScreenState extends State<SplashScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // FadeTransition(
-            //   opacity: fadeAnimator,
-            //   child: const Icon(
-            //     Icons.radio,
-            //     color: Colors.white,
-            //     size: 80,
-            //   ),
-            // ),
             Lottie.asset(
-              // 'https://lottie.host/895bcb52-118e-4e03-ab29-c1bc5853c3fc/sT6tafrvpd.json',
               'assets/lottie-splash.json',
               width: 100,
-              // height: 200,
               fit: BoxFit.fill,
             ),
-
-            // SizedBox(height: 30),
-            // const Text(
-            //   'Radio Station',
-            //   style: TextStyle(
-            //       color: Colors.white,
-            //       fontSize: 30,
-            //       fontWeight: FontWeight.bold),
-            // ),
           ],
         ),
       ),

@@ -14,32 +14,50 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
 
   late StreamSubscription _errorSubscription;
   late StreamSubscription _mainPlayerSubscription;
-  late StreamSubscription _metadataStream;
+  late StreamSubscription _metadataSubscription;
+  late StreamSubscription _volumeSubscription;
 
-  RadioPlayerCubit(
-      {required AudioSessioGetter audioSessionGetter,
-      required AudioPlayer player})
-      : _audioSessionGetter = audioSessionGetter,
+  RadioPlayerCubit({
+    required AudioSessioGetter audioSessionGetter,
+    required AudioPlayer player,
+  })  : _audioSessionGetter = audioSessionGetter,
         _player = player,
-        super(const RadioPlayerState(type: RadioPlayerStateType.loading));
+        super(const RadioPlayerState(
+          type: RadioPlayerStateType.loading,
+          volume: null,
+        ));
 
   void startStreaming(String streamUrl) async {
     try {
       final audioSession = await _audioSessionGetter();
       await audioSession.configure(const AudioSessionConfiguration.speech());
       await _player.setAudioSource(AudioSource.uri(Uri.parse(streamUrl)));
-      _errorSubscription = _player.playbackEventStream.listen(
+
+      _errorSubscription = _startErrorListener(_player);
+      _metadataSubscription = _startMetadataListener(_player);
+      _mainPlayerSubscription = _startPlayerStateListener(_player);
+      _volumeSubscription = _startVolumeListener(_player);
+    } on Exception catch (e) {
+      print('Some error happened with the player $e');
+      emit(state.copyWith(type: RadioPlayerStateType.error));
+    }
+  }
+
+  StreamSubscription<double> _startVolumeListener(AudioPlayer player) =>
+      player.volumeStream.listen((volume) {
+        emit(state.copyWith(volume: volume));
+      });
+
+  StreamSubscription<PlaybackEvent> _startErrorListener(AudioPlayer player) =>
+      player.playbackEventStream.listen(
         (event) {
           // An error ocurred while playing the stream
         },
       );
-      _metadataStream = _player.icyMetadataStream.listen((event) {
-        final radioMetadataTitle = event?.info?.title;
-        if (radioMetadataTitle != null) {
-          emit(state.copyWith(radioMetadataTitle: radioMetadataTitle));
-        }
-      });
-      _mainPlayerSubscription = _player.playerStateStream.listen((event) {
+
+  StreamSubscription<PlayerState> _startPlayerStateListener(
+          AudioPlayer player) =>
+      player.playerStateStream.listen((event) {
         switch (event.processingState) {
           case ProcessingState.loading:
           case ProcessingState.buffering:
@@ -56,10 +74,17 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
           ),
         );
       });
-    } on Exception catch (e) {
-      print('Some erro happened with the player $e');
-      emit(state.copyWith(type: RadioPlayerStateType.error));
-    }
+
+  StreamSubscription<IcyMetadata?> _startMetadataListener(AudioPlayer player) =>
+      player.icyMetadataStream.listen((event) {
+        final radioMetadataTitle = event?.info?.title;
+        if (radioMetadataTitle != null) {
+          emit(state.copyWith(radioMetadataTitle: radioMetadataTitle));
+        }
+      });
+
+  void volumeChanged(double value) {
+    _player.setVolume(value);
   }
 
   void pause() {
@@ -74,7 +99,8 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
   Future<void> close() async {
     _errorSubscription.cancel();
     _mainPlayerSubscription.cancel();
-    _metadataStream.cancel();
+    _metadataSubscription.cancel();
+    _volumeSubscription.cancel();
     _player.dispose();
     await super.close();
   }
@@ -86,19 +112,26 @@ enum RadioPlayerStateType { loading, playing, stopped, error }
 class RadioPlayerState extends Equatable {
   final RadioPlayerStateType type;
   final String? radioMetadataTitle;
+  // Null volume means it hasn't loaded yet.
+  final double? volume;
 
   const RadioPlayerState({
     required this.type,
     this.radioMetadataTitle,
+    required this.volume,
   });
 
-  RadioPlayerState copyWith(
-          {String? radioMetadataTitle, RadioPlayerStateType? type}) =>
+  RadioPlayerState copyWith({
+    String? radioMetadataTitle,
+    RadioPlayerStateType? type,
+    double? volume,
+  }) =>
       RadioPlayerState(
         type: type ?? this.type,
         radioMetadataTitle: radioMetadataTitle ?? this.radioMetadataTitle,
+        volume: volume ?? this.volume,
       );
 
   @override
-  List<Object?> get props => [type, radioMetadataTitle];
+  List<Object?> get props => [type, radioMetadataTitle, volume];
 }
