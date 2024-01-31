@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:radio_app/common_ui/custom_icon.dart';
 import 'package:radio_app/features/radio_list/cubit/radio_list_cubit.dart';
 import 'package:radio_app/features/radio_list/view/widgets/all_radios_tab.dart';
 import 'package:radio_app/theme.dart';
@@ -53,19 +54,11 @@ class _RadioListViewState extends State<RadioListView> {
             tabs: [
               Tab(
                 text: 'All',
-                icon: Icon(
-                  Icons.radio,
-                  size: 30,
-                  color: primaryColor,
-                ),
+                icon: CustomIcon(icon: Icons.radio),
               ),
               Tab(
                 text: 'Favorites',
-                icon: Icon(
-                  Icons.favorite,
-                  size: 30,
-                  color: primaryColor,
-                ),
+                icon: CustomIcon(icon: Icons.favorite),
               ),
             ],
           ),

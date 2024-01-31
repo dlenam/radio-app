@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:radio_app/common_ui/widgets.dart';
+import 'package:radio_app/common_ui/custom_icon.dart';
+import 'package:radio_app/common_ui/custom_network_image.dart';
 import 'package:radio_app/features/radio_list/cubit/radio_list_cubit.dart';
 import 'package:radio_app/features/radio_player/view/radio_player_screen.dart';
 import 'package:radio_app/routes/custom_page_routes.dart';
@@ -59,17 +60,14 @@ class _AllRadiosTabState extends State<AllRadiosTab> {
                   onTap: () => Navigator.of(context).push(
                       bottomToTopTransitionPage(
                           RadioPlayerScreen(station: radioStation))),
-                  leading: CustomeNetworkImage(
+                  leading: CustomNetworkImage(
                       imageUrl: radioStation.iconUrl, radius: 10),
                   title: Text(
                     radioStation.name ?? 'Unknown station',
                     overflow: TextOverflow.ellipsis,
                   ),
-                  trailing: const Icon(
-                    Icons.favorite_border_outlined,
-                    size: 30,
-                    color: Colors.black,
-                  ),
+                  trailing:
+                      const CustomIcon(icon: Icons.favorite_border_outlined),
                 ),
               );
             },

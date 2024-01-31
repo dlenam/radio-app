@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CustomeNetworkImage extends StatelessWidget {
+class CustomNetworkImage extends StatelessWidget {
   final String imageUrl;
   final double radius;
 
   final Widget? onMissingOrErrorWidget;
 
-  const CustomeNetworkImage({
+  const CustomNetworkImage({
     super.key,
     required this.imageUrl,
     this.radius = 20,
@@ -34,7 +34,7 @@ class CustomeNetworkImage extends StatelessWidget {
 }
 
 class _MissingImageIcon extends StatelessWidget {
-  const _MissingImageIcon({super.key});
+  const _MissingImageIcon();
 
   @override
   Widget build(BuildContext context) {

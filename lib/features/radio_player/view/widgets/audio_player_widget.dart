@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:radio_app/common_ui/custom_icon.dart';
 import 'package:radio_app/features/radio_player/cubit/radio_player_cubit.dart';
 import 'package:radio_app/theme.dart';
 
@@ -116,7 +117,8 @@ class _VolumeSlider extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
-        const Icon(Icons.volume_up_rounded, size: 40),
+        // const Icon(Icons.volume_up_rounded, size: 40),
+        const CustomIcon(icon: Icons.volume_up_rounded),
         Expanded(
           child: Slider(
             min: 0,
