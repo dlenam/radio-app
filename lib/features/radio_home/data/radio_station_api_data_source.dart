@@ -10,8 +10,7 @@ class RadioStationApiDataSource {
 
   const RadioStationApiDataSource(this.http);
 
-  Future<List<RadioStation>> getRadios(
-      {required int offset, int limit = 10}) async {
+  Future<RadioList> getRadios({required int offset, int limit = 10}) async {
     final url = Uri.https(_radioAPIUrl, '/json/stations/search', {
       'offset': offset.toString(),
       'limit': limit.toString(),

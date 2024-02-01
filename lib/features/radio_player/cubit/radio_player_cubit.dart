@@ -12,10 +12,10 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
   final AudioPlayer _audioPlayer;
   final RadioVolumeRepository _radioVolumeRepository;
 
-  late StreamSubscription _errorSubscription;
-  late StreamSubscription _mainPlayerSubscription;
-  late StreamSubscription _metadataSubscription;
-  late StreamSubscription _volumeSubscription;
+  StreamSubscription? _errorSubscription;
+  StreamSubscription? _mainPlayerSubscription;
+  StreamSubscription? _metadataSubscription;
+  StreamSubscription? _volumeSubscription;
 
   RadioPlayerCubit({
     required RadioVolumeRepository radioVolumeRepository,
@@ -116,10 +116,10 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
 
   @override
   Future<void> close() async {
-    _errorSubscription.cancel();
-    _mainPlayerSubscription.cancel();
-    _metadataSubscription.cancel();
-    _volumeSubscription.cancel();
+    _errorSubscription?.cancel();
+    _mainPlayerSubscription?.cancel();
+    _metadataSubscription?.cancel();
+    _volumeSubscription?.cancel();
     _audioPlayer.dispose();
     await super.close();
   }

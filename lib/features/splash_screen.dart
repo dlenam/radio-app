@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
-import 'package:radio_app/features/radio_list/view/radio_home_screen.dart';
+import 'package:radio_app/features/radio_home/view/radio_home_screen.dart';
 import 'package:radio_app/routes/custom_page_routes.dart';
 import 'package:radio_app/theme.dart';
 

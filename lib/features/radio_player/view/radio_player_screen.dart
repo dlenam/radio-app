@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:radio_app/common_ui/custom_icon.dart';
 import 'package:radio_app/common_ui/custom_network_image.dart';
+import 'package:radio_app/features/radio_favorites/cubit/radio_favorites_cubit.dart';
 import 'package:radio_app/features/radio_player/view/widgets/audio_player_widget.dart';
+import 'package:radio_app/features/widgets/favorite_interactive_icon.dart';
 import 'package:radio_app/model/radio_station.dart';
 import 'package:radio_app/theme.dart';
 
 class RadioPlayerScreen extends StatefulWidget {
-  final RadioStation station;
+  final RadioStation radioStation;
 
-  const RadioPlayerScreen({super.key, required this.station});
+  const RadioPlayerScreen({super.key, required this.radioStation});
 
   @override
   State<RadioPlayerScreen> createState() => _RadioPlayerScreenState();
@@ -21,7 +25,7 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            widget.station.name ?? 'Unknown station',
+            widget.radioStation.name ?? 'Unknown station',
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
@@ -34,7 +38,6 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> {
           child: IconButton(
             icon: const CustomIcon(
               icon: Icons.keyboard_arrow_down_rounded,
-              // customColor: Colors.black,
             ),
             onPressed: () => Navigator.of(context).pop(),
           ),
@@ -42,14 +45,9 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
-            child: IconButton(
-              icon: const CustomIcon(
-                icon: Icons.favorite_outline,
-                // customColor: Colors.black,
-              ),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(_buildSnackBar());
-              },
+            child: BlocProvider<RadioFavoritesCubit>(
+              create: (_) => GetIt.instance.get<RadioFavoritesCubit>(),
+              child: FavoriteInteractiveIcon(radioStation: widget.radioStation),
             ),
           ),
         ],
@@ -61,10 +59,12 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> {
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
-              child: CustomNetworkImage(imageUrl: widget.station.iconUrl),
+              child: CustomNetworkImage(imageUrl: widget.radioStation.iconUrl),
             ),
             Expanded(
-                child: AudioPlayerWidget(streamUrl: widget.station.streamUrl)),
+              child: AudioPlayerWidget(
+                  radioStreamUrl: widget.radioStation.streamUrl),
+            ),
           ],
         ),
       ),

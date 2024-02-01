@@ -1,4 +1,3 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -8,15 +7,15 @@ import 'package:radio_app/features/radio_player/view/widgets/audio_player_button
 import 'package:radio_app/features/radio_player/view/widgets/audio_volume_slider.dart';
 
 class AudioPlayerWidget extends StatelessWidget {
-  final String streamUrl;
+  final String radioStreamUrl;
 
-  const AudioPlayerWidget({super.key, required this.streamUrl});
+  const AudioPlayerWidget({super.key, required this.radioStreamUrl});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<RadioPlayerCubit>(
-      create: (_) =>
-          GetIt.instance.get<RadioPlayerCubit>()..startStreaming(streamUrl),
+      create: (_) => GetIt.instance.get<RadioPlayerCubit>()
+        ..startStreaming(radioStreamUrl),
       child: const _AudioPlayerView(),
     );
   }
@@ -71,35 +70,6 @@ class _AudioPlayerViewState extends State<_AudioPlayerView>
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _AudioMetadataTitle extends StatelessWidget {
-  final String title;
-  const _AudioMetadataTitle({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: AnimatedTextKit(
-        animatedTexts: [
-          ColorizeAnimatedText(
-            title,
-            textAlign: TextAlign.center,
-            textStyle: const TextStyle(
-              fontSize: 20.0,
-              fontFamily: 'Horizon',
-            ),
-            colors: [
-              Colors.purple,
-              Colors.blue,
-              Colors.yellow,
-              Colors.red,
-            ],
-          )
-        ],
       ),
     );
   }
