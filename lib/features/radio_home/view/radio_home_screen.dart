@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:radio_app/common_ui/custom_icon.dart';
 import 'package:radio_app/features/radio_favorites/cubit/radio_favorites_cubit.dart';
+import 'package:radio_app/features/radio_favorites/radio_favorites_tab.dart';
 import 'package:radio_app/features/radio_home/cubit/radio_home_cubit.dart';
 import 'package:radio_app/features/radio_home/view/widgets/all_radios_tab.dart';
-import 'package:radio_app/features/radio_home/view/widgets/radio_favorites_tab.dart';
 import 'package:radio_app/theme.dart';
 
 class RadioHomeScreen extends StatelessWidget {
