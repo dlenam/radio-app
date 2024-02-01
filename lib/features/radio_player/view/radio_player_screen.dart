@@ -71,17 +71,3 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> {
     );
   }
 }
-
-SnackBar _buildSnackBar() => SnackBar(
-      backgroundColor: primaryColor,
-      content: const Padding(
-        padding: EdgeInsets.symmetric(vertical: 12),
-        child: Center(child: Text('Added to favourites!')),
-      ),
-      duration: const Duration(milliseconds: 1500),
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-    );
