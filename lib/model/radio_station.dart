@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'radio_station.g.dart';
@@ -35,6 +36,24 @@ class RadioStation extends Equatable {
       _$RadioStationFromJson(json);
 
   Map<String, dynamic> toJson() => _$RadioStationToJson(this);
+
+  // Generates a deterministic color from the name of the radio
+  // Taken from https://anoop4real.medium.com/flutter-generate-color-hash-uicolor-from-string-names-fb2ac75bde6b
+  Color get color {
+    if (name == null) {
+      return Colors.white;
+    }
+    var hash = 0;
+    for (var i = 0; i < name!.length; i++) {
+      hash = name!.codeUnitAt(i) + ((hash << 5) - hash);
+    }
+    final finalHash = hash.abs() % (256 * 256 * 256);
+    final red = ((finalHash & 0xFF0000) >> 16);
+    final blue = ((finalHash & 0xFF00) >> 8);
+    final green = ((finalHash & 0xFF));
+    final color = Color.fromRGBO(red, green, blue, 1);
+    return color;
+  }
 
   @override
   List<Object?> get props => [

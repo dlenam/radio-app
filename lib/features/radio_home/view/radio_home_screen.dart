@@ -46,6 +46,7 @@ class _RadioListViewState extends State<RadioListView> {
       initialIndex: 0,
       length: 2,
       child: Scaffold(
+        // backgroundColor: secondaryColor,
         appBar: AppBar(
           title: const Text(
             'Radios',
@@ -73,11 +74,24 @@ class _RadioListViewState extends State<RadioListView> {
             ],
           ),
         ),
-        body: const TabBarView(
-          children: [
-            AllRadiosTab(),
-            RadioFavoritesTab(),
-          ],
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                secondaryColor,
+                primaryColor,
+                secondaryColor,
+              ],
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+            ),
+          ),
+          child: const TabBarView(
+            children: [
+              AllRadiosTab(),
+              RadioFavoritesTab(),
+            ],
+          ),
         ),
       ),
     );

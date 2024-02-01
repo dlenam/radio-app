@@ -18,28 +18,32 @@ class RadioListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: ListView.builder(
         controller: controller,
         shrinkWrap: true,
         itemCount: radioList.length,
         itemBuilder: (context, index) {
           final radioStation = radioList[index];
-          return Card(
-            child: ListTile(
-              contentPadding: const EdgeInsets.all(12),
-              onTap: () => Navigator.of(context).push(
-                bottomToTopTransitionPage(
-                  RadioPlayerScreen(radioStation: radioStation),
+          return Padding(
+            padding: EdgeInsets.only(top: index == 0 ? 20 : 0),
+            child: Card(
+              color: const Color.fromARGB(255, 229, 226, 226),
+              child: ListTile(
+                contentPadding: const EdgeInsets.all(12),
+                onTap: () => Navigator.of(context).push(
+                  bottomToTopTransitionPage(
+                    RadioPlayerScreen(radioStation: radioStation),
+                  ),
                 ),
+                leading: CustomNetworkImage(
+                    imageUrl: radioStation.iconUrl, radius: 10),
+                title: Text(
+                  radioStation.name ?? 'Unknown station',
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: FavoriteInteractiveIcon(radioStation: radioStation),
               ),
-              leading: CustomNetworkImage(
-                  imageUrl: radioStation.iconUrl, radius: 10),
-              title: Text(
-                radioStation.name ?? 'Unknown station',
-                overflow: TextOverflow.ellipsis,
-              ),
-              trailing: FavoriteInteractiveIcon(radioStation: radioStation),
             ),
           );
         },
