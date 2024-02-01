@@ -63,7 +63,8 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> {
               width: double.infinity,
               child: CustomNetworkImage(imageUrl: widget.station.iconUrl),
             ),
-            Expanded(child: AudioPlayer(streamUrl: widget.station.streamUrl)),
+            Expanded(
+                child: AudioPlayerWidget(streamUrl: widget.station.streamUrl)),
           ],
         ),
       ),
