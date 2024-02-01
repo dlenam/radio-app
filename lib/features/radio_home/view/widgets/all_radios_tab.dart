@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:radio_app/common_ui/radio_list_widget.dart';
 import 'package:radio_app/features/radio_home/cubit/radio_home_cubit.dart';
-import 'package:radio_app/features/radio_home/view/widgets/radio_list_widget.dart';
 
 class AllRadiosTab extends StatefulWidget {
   const AllRadiosTab({super.key});

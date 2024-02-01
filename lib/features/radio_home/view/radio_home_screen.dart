@@ -13,40 +13,43 @@ class RadioHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(useMaterial3: true),
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider<RadioHomeCubit>(
-            create: (BuildContext _) =>
-                GetIt.instance.get<RadioHomeCubit>()..loadMoreRadioStations(),
-          ),
-          BlocProvider<RadioFavoritesCubit>(
-            create: (BuildContext _) =>
-                GetIt.instance.get<RadioFavoritesCubit>(),
-          ),
-        ],
-        child: const RadioListView(),
+    return WillPopScope(
+      // This is our home page, we don't want anyone to pop it
+      onWillPop: () async => false,
+      child: MaterialApp(
+        theme: ThemeData(useMaterial3: true),
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider<RadioHomeCubit>(
+              create: (BuildContext _) =>
+                  GetIt.instance.get<RadioHomeCubit>()..loadMoreRadioStations(),
+            ),
+            BlocProvider<RadioFavoritesCubit>(
+              create: (BuildContext _) =>
+                  GetIt.instance.get<RadioFavoritesCubit>(),
+            ),
+          ],
+          child: const RadioHomeContent(),
+        ),
       ),
     );
   }
 }
 
-class RadioListView extends StatefulWidget {
-  const RadioListView({super.key});
+class RadioHomeContent extends StatefulWidget {
+  const RadioHomeContent({super.key});
 
   @override
-  State<RadioListView> createState() => _RadioListViewState();
+  State<RadioHomeContent> createState() => _RadioHomeContentState();
 }
 
-class _RadioListViewState extends State<RadioListView> {
+class _RadioHomeContentState extends State<RadioHomeContent> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
       child: Scaffold(
-        // backgroundColor: secondaryColor,
         appBar: AppBar(
           title: const Text(
             'Radios',

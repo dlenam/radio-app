@@ -44,9 +44,9 @@ SnackBar _buildSnackBar(bool isFavorite) => SnackBar(
       content: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Center(
-            child: Text(isFavorite
-                ? 'Removed from favorites!'
-                : 'Added to favourites!')),
+          child: Text(
+              isFavorite ? 'Removed from favorites!' : 'Added to favourites!'),
+        ),
       ),
       duration: const Duration(milliseconds: 1500),
       padding: const EdgeInsets.symmetric(horizontal: 8.0),

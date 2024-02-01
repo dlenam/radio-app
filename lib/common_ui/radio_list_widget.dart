@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:radio_app/common_ui/custom_network_image.dart';
+import 'package:radio_app/common_ui/custom_page_routes.dart';
 import 'package:radio_app/features/radio_player/view/radio_player_screen.dart';
 import 'package:radio_app/features/widgets/favorite_interactive_icon.dart';
 import 'package:radio_app/model/radio_station.dart';
-import 'package:radio_app/routes/custom_page_routes.dart';
+import 'package:radio_app/theme.dart';
 
 class RadioListWidget extends StatelessWidget {
   final RadioList radioList;
@@ -28,7 +29,7 @@ class RadioListWidget extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.only(top: index == 0 ? 20 : 0),
             child: Card(
-              color: const Color.fromARGB(255, 229, 226, 226),
+              color: standardBackgroundColor,
               child: ListTile(
                 contentPadding: const EdgeInsets.all(12),
                 onTap: () => Navigator.of(context).push(

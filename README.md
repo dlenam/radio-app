@@ -1,16 +1,31 @@
-# radio_app
+# Radio app
 
-A new Flutter project.
+## What the app offers
 
-## Getting Started
+It's a simple app that allows the user to listen and favorite radio stations listed through the [Community Radio Station](https://at1.api.radio-browser.info/) free API service.
 
-This project is a starting point for a Flutter application.
+As the app is super simple, so is its architecture. It tries to follow the clean arquitecture principles splitting into:
 
-A few resources to get you started if this is your first Flutter project:
+- **Model layer** - our entities, which consist only on radio stations 🤷‍♂️
+- **Business logic layer** - where we have the Cubit's and Repositories
+- **Presentation layer** - all the Flutter framework specific stuff
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## How to execute
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+You will need Flutter version >= 3.7.11
+
+If you use VSCode there's an automatic Run option configured.
+
+Otherwise you can just run `flutter run` from the root folder.
+
+## Relevant dependencies
+
+- `just_audio` - audio player library
+- `flutter_bloc` - state management solution
+- `get_it` - service locator pattern implementation
+- `equatable` - combined with the BLoC pattern to optimise state rendering
+- `flutter_easyloading` - provides some nice loaders by default
+- `lottie` - cool animations format, used only in the animation on the splash
+- `animated_text_kit` - to give a nice and shinny effect on a text of the player screen
+- `rxdart` - to reactively expose the data stored so the BLoCs reacts accordingly.
+- `json_annotation` - automatic serialisation/deserialisation code generator (and avoid some manual code work)

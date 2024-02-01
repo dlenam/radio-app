@@ -22,6 +22,7 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: standardBackgroundColor,
       appBar: AppBar(
         title: Center(
           child: Text(
