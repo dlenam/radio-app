@@ -29,7 +29,7 @@ class RadioListWidget extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.only(top: index == 0 ? 20 : 0),
             child: Card(
-              color: standardBackgroundColor,
+              color: appTheme.standardBackgroundColor,
               child: ListTile(
                 contentPadding: const EdgeInsets.all(12),
                 onTap: () => Navigator.of(context).push(

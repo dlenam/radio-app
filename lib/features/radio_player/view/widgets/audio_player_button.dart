@@ -34,14 +34,14 @@ class _AudioPlayerButtonContent extends StatelessWidget {
           margin: const EdgeInsets.all(8.0),
           width: _buttonSize,
           height: _buttonSize,
-          child: const CircularProgressIndicator(color: primaryColor),
+          child: CircularProgressIndicator(color: appTheme.primaryColor),
         );
       case RadioPlayerStateType.playing:
         return IconButton(
           icon: const Icon(Icons.pause_circle),
           iconSize: _buttonSize,
           onPressed: context.read<RadioPlayerCubit>().pause,
-          color: primaryColor,
+          color: appTheme.primaryColor,
         );
       case RadioPlayerStateType.stopped:
       case RadioPlayerStateType.error:
@@ -49,7 +49,7 @@ class _AudioPlayerButtonContent extends StatelessWidget {
           icon: const Icon(Icons.play_arrow_rounded),
           iconSize: _buttonSize,
           onPressed: () => context.read<RadioPlayerCubit>().play(),
-          color: primaryColor,
+          color: appTheme.primaryColor,
         );
     }
   }

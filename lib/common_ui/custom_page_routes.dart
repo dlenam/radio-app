@@ -4,7 +4,7 @@ import 'package:radio_app/theme.dart';
 class FadeInPageRouteTransition<T> extends PageRoute<T> {
   FadeInPageRouteTransition(this.child);
   @override
-  Color get barrierColor => primaryColor;
+  Color get barrierColor => appTheme.primaryColor;
 
   @override
   String? get barrierLabel => null;

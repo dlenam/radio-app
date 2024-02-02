@@ -13,9 +13,9 @@ class RadioHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return PopScope(
       // This is our home page, we don't want anyone to pop it
-      onWillPop: () async => false,
+      canPop: false,
       child: MaterialApp(
         theme: ThemeData(useMaterial3: true),
         home: MultiBlocProvider(
@@ -51,21 +51,22 @@ class _RadioHomeContentState extends State<RadioHomeContent> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
+          backgroundColor: appTheme.standardBackgroundColor,
+          title: Text(
             'Radios',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: primaryColor,
+              color: appTheme.primaryColor,
             ),
           ),
           // The elevation value of the app bar when scroll view has
           // scrolled underneath the app bar.
           scrolledUnderElevation: 4.0,
-          shadowColor: primaryColor,
-          bottom: const TabBar(
-            indicatorColor: primaryColor,
-            labelColor: primaryColor,
-            tabs: [
+          shadowColor: appTheme.primaryColor,
+          bottom: TabBar(
+            indicatorColor: appTheme.primaryColor,
+            labelColor: appTheme.primaryColor,
+            tabs: const [
               Tab(
                 text: 'All',
                 icon: CustomIcon(icon: Icons.radio),
@@ -78,12 +79,12 @@ class _RadioHomeContentState extends State<RadioHomeContent> {
           ),
         ),
         body: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                secondaryColor,
-                primaryColor,
-                secondaryColor,
+                appTheme.secondaryColor,
+                appTheme.primaryColor,
+                appTheme.secondaryColor,
               ],
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,

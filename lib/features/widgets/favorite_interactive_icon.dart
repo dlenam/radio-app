@@ -40,7 +40,7 @@ class FavoriteInteractiveIcon extends StatelessWidget {
 }
 
 SnackBar _buildSnackBar(bool isFavorite) => SnackBar(
-      backgroundColor: primaryColor,
+      backgroundColor: appTheme.primaryColor,
       content: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Center(

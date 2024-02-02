@@ -55,12 +55,12 @@ class _AudioPlayerViewState extends State<_AudioPlayerView>
       listener: (context, state) {
         // TODO: do something about the errors
       },
-      child: SizedBox(
+      child: const SizedBox(
         width: double.maxFinite,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Expanded(child: AudioPlayerButton()),
             AudioVolumeSlider(),
             SizedBox(height: 50),

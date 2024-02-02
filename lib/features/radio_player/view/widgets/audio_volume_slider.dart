@@ -23,7 +23,7 @@ class AudioVolumeSlider extends StatelessWidget {
                     max: 1,
                     value: state.volume!,
                     onChanged: context.read<RadioPlayerCubit>().volumeChanged,
-                    activeColor: primaryColor,
+                    activeColor: appTheme.primaryColor,
                   ),
                 )
               ],

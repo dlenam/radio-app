@@ -1,5 +1,19 @@
 import 'package:flutter/material.dart';
 
-const primaryColor = Color.fromARGB(255, 13, 74, 123);
-const secondaryColor = Color.fromARGB(255, 116, 153, 30);
-const standardBackgroundColor = Color.fromARGB(255, 229, 226, 226);
+class Theme {
+  final Color primaryColor;
+  final Color secondaryColor;
+  final Color standardBackgroundColor;
+
+  Theme({
+    required this.primaryColor,
+    required this.secondaryColor,
+    required this.standardBackgroundColor,
+  });
+}
+
+final appTheme = Theme(
+  primaryColor: const Color.fromARGB(255, 172, 4, 32),
+  secondaryColor: const Color.fromARGB(255, 112, 233, 247),
+  standardBackgroundColor: Color.fromARGB(255, 255, 246, 221),
+);

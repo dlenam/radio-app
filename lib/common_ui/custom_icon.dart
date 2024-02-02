@@ -16,7 +16,7 @@ class CustomIcon extends StatelessWidget {
     return Icon(
       icon,
       size: 30,
-      color: customColor ?? primaryColor,
+      color: customColor ?? appTheme.primaryColor,
     );
   }
 }

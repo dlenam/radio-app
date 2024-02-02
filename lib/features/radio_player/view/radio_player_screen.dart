@@ -22,15 +22,16 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: standardBackgroundColor,
+      backgroundColor: appTheme.standardBackgroundColor,
       appBar: AppBar(
+        backgroundColor: appTheme.standardBackgroundColor,
         title: Center(
           child: Text(
             widget.radioStation.name ?? 'Unknown station',
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
-              color: primaryColor,
+              color: appTheme.primaryColor,
             ),
           ),
         ),
