@@ -27,14 +27,18 @@ class RadioListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 0),
       child: AnimatedList(
         key: _listKey,
         controller: controller,
         shrinkWrap: true,
-        initialItemCount: radioList.length,
+        initialItemCount: radioList.length + 1,
         itemBuilder: (context, index, animation) {
-          final radioStation = radioList[index];
+          if (index == 0) {
+            // Add a pading that doesn't screw the scrolling nor the animation
+            return const SizedBox(height: 10);
+          }
+          final radioStation = radioList[index - 1];
           return BlocBuilder<RadioFavoritesCubit, RadioFavoritesState>(
             buildWhen: (previous, current) =>
                 previous.isFavorite(radioStation.id) !=
