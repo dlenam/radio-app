@@ -12,6 +12,7 @@ class RadioFavoritesTab extends StatelessWidget {
       builder: (context, state) {
         return RadioListWidget(
           radioList: state.favoriteList,
+          shouldRemoveItemWhenUnfavorite: true,
         );
       },
     );

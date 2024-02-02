@@ -1,54 +1,180 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radio_app/common_ui/custom_network_image.dart';
 import 'package:radio_app/common_ui/custom_page_routes.dart';
+import 'package:radio_app/features/radio_favorites/cubit/radio_favorites_cubit.dart';
 import 'package:radio_app/features/radio_player/view/radio_player_screen.dart';
-import 'package:radio_app/features/widgets/favorite_interactive_icon.dart';
+import 'package:radio_app/features/widgets/favorite_icon.dart';
 import 'package:radio_app/model/radio_station.dart';
 import 'package:radio_app/theme.dart';
 
 class RadioListWidget extends StatelessWidget {
   final RadioList radioList;
   final ScrollController? controller;
+  final bool shouldRemoveItemWhenUnfavorite;
 
-  const RadioListWidget({
+  RadioListWidget({
     super.key,
     this.controller,
     required this.radioList,
+    this.shouldRemoveItemWhenUnfavorite = false,
   });
+
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: ListView.builder(
+      padding: const EdgeInsets.only(top: 20),
+      child: AnimatedList(
+        key: _listKey,
         controller: controller,
         shrinkWrap: true,
-        itemCount: radioList.length,
-        itemBuilder: (context, index) {
+        initialItemCount: radioList.length,
+        itemBuilder: (context, index, animation) {
           final radioStation = radioList[index];
-          return Padding(
-            padding: EdgeInsets.only(top: index == 0 ? 20 : 0),
-            child: Card(
-              color: appTheme.standardBackgroundColor,
-              child: ListTile(
-                contentPadding: const EdgeInsets.all(12),
-                onTap: () => Navigator.of(context).push(
-                  bottomToTopTransitionPage(
-                    RadioPlayerScreen(radioStation: radioStation),
-                  ),
-                ),
-                leading: CustomNetworkImage(
-                    imageUrl: radioStation.iconUrl, radius: 10),
-                title: Text(
-                  radioStation.name ?? 'Unknown station',
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: FavoriteInteractiveIcon(radioStation: radioStation),
-              ),
-            ),
+          return BlocBuilder<RadioFavoritesCubit, RadioFavoritesState>(
+            buildWhen: (previous, current) =>
+                previous.isFavorite(radioStation.id) !=
+                current.isFavorite(radioStation.id),
+            builder: (context, state) {
+              final isFavorite = state.isFavorite(radioStation.id);
+              return _AnimatedListItem(
+                isFavorite: state.isFavorite(radioStation.id),
+                radioStation: radioStation,
+                animation: animation,
+                onTap: () {
+                  _handleFavorite(
+                    index: index,
+                    radioStation: radioStation,
+                    isFavorite: isFavorite,
+                    radioFavoritesCubit: context.read<RadioFavoritesCubit>(),
+                  );
+                  final scaffold = ScaffoldMessenger.of(context);
+                  scaffold.clearSnackBars();
+                  scaffold.showSnackBar(_buildSnackBar(isFavorite));
+                },
+              );
+            },
           );
         },
       ),
     );
   }
+
+  void _handleFavorite({
+    required int index,
+    required RadioStation radioStation,
+    required bool isFavorite,
+    required RadioFavoritesCubit radioFavoritesCubit,
+  }) async {
+    if (isFavorite) {
+      if (shouldRemoveItemWhenUnfavorite) {
+        await _removeFromListWithAnimation(
+          index: index,
+          radioStation: radioStation,
+        );
+      }
+      radioFavoritesCubit.removeFavorite(radioStation);
+      return;
+    }
+    radioFavoritesCubit.addFavorite(radioStation);
+  }
+
+  Future<void> _removeFromListWithAnimation({
+    required int index,
+    required RadioStation radioStation,
+  }) {
+    final completer = Completer();
+    _listKey.currentState!.removeItem(
+      index,
+      // Widget that is displayed while removing
+      (_, animation) => _AnimatedListItem(
+        isFavorite: true,
+        radioStation: radioStation,
+        animation: animation
+          ..addStatusListener(
+            (status) {
+              if (status == AnimationStatus.dismissed) {
+                completer.complete();
+              }
+            },
+          ),
+        // We don't need to capture the onTap, as we don't want the user to
+        // interact with the animation
+        onTap: () {},
+      ),
+      duration: const Duration(milliseconds: 300),
+    );
+    return completer.future;
+  }
 }
+
+class _AnimatedListItem extends StatelessWidget {
+  final RadioStation radioStation;
+  final bool isFavorite;
+  final VoidCallback onTap;
+  final Animation<double> animation;
+
+  const _AnimatedListItem({
+    required this.radioStation,
+    required this.isFavorite,
+    required this.onTap,
+    required this.animation,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(-1, 0),
+        end: const Offset(0, 0),
+      ).animate(animation),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Card(
+          color: appTheme.standardBackgroundColor,
+          child: ListTile(
+            contentPadding: const EdgeInsets.all(12),
+            onTap: () => Navigator.of(context).push(
+              bottomToTopTransitionPage(
+                RadioPlayerScreen(radioStation: radioStation),
+              ),
+            ),
+            leading:
+                CustomNetworkImage(imageUrl: radioStation.iconUrl, radius: 10),
+            title: Text(
+              radioStation.name ?? 'Unknown station',
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: FavoriteIcon(
+              onTap: onTap,
+              isFavorite: isFavorite,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+SnackBar _buildSnackBar(bool isFavorite) => SnackBar(
+      backgroundColor: appTheme.primaryColor,
+      content: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Center(
+          child: Text(
+            isFavorite ? 'Removed from favorites!' : 'Added to favourites!',
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+      duration: const Duration(milliseconds: 1500),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    );

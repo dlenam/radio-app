@@ -5,7 +5,7 @@ import 'package:radio_app/common_ui/custom_icon.dart';
 import 'package:radio_app/common_ui/custom_network_image.dart';
 import 'package:radio_app/features/radio_favorites/cubit/radio_favorites_cubit.dart';
 import 'package:radio_app/features/radio_player/view/widgets/audio_player_widget.dart';
-import 'package:radio_app/features/widgets/favorite_interactive_icon.dart';
+import 'package:radio_app/features/widgets/favorite_icon.dart';
 import 'package:radio_app/model/radio_station.dart';
 import 'package:radio_app/theme.dart';
 
@@ -21,6 +21,7 @@ class RadioPlayerScreen extends StatefulWidget {
 class _RadioPlayerScreenState extends State<RadioPlayerScreen> {
   @override
   Widget build(BuildContext context) {
+    final cubit = GetIt.instance.get<RadioFavoritesCubit>();
     return Scaffold(
       backgroundColor: appTheme.standardBackgroundColor,
       appBar: AppBar(
@@ -47,9 +48,19 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
-            child: BlocProvider<RadioFavoritesCubit>(
-              create: (_) => GetIt.instance.get<RadioFavoritesCubit>(),
-              child: FavoriteInteractiveIcon(radioStation: widget.radioStation),
+            child: BlocBuilder<RadioFavoritesCubit, RadioFavoritesState>(
+              bloc: cubit,
+              builder: (context, state) {
+                final isFavorite = state.isFavorite(widget.radioStation.id);
+                return FavoriteIcon(
+                  onTap: () {
+                    isFavorite
+                        ? cubit.removeFavorite(widget.radioStation)
+                        : cubit.addFavorite(widget.radioStation);
+                  },
+                  isFavorite: isFavorite,
+                );
+              },
             ),
           ),
         ],

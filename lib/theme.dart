@@ -15,5 +15,5 @@ class Theme {
 final appTheme = Theme(
   primaryColor: const Color.fromARGB(255, 172, 4, 32),
   secondaryColor: const Color.fromARGB(255, 112, 233, 247),
-  standardBackgroundColor: Color.fromARGB(255, 255, 246, 221),
+  standardBackgroundColor: const Color.fromARGB(255, 255, 246, 221),
 );
