@@ -42,8 +42,7 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
       _metadataSubscription = _startMetadataListener(_audioPlayer);
       _mainPlayerSubscription = _startPlayerStateListener(_audioPlayer);
       _volumeSubscription = _startVolumeListener(_audioPlayer);
-    } on Exception catch (e) {
-      print('Some error happened with the player $e');
+    } on Exception catch (_) {
       emit(state.copyWith(type: RadioPlayerStateType.error));
     }
   }

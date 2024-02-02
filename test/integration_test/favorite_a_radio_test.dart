@@ -4,8 +4,8 @@ import 'package:radio_app/features/widgets/favorite_icon.dart';
 import 'package:radio_app/infra/dependency_injection.dart';
 import 'package:radio_app/main.dart';
 
-import '../test_utils/fake_http_client.dart';
-import '../test_utils/in_memory_storage_service.dart';
+import '../utils/fake_http_client.dart';
+import '../utils/in_memory_storage_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -40,7 +40,7 @@ class _AllRadiosTabState extends State<AllRadiosTab> {
             EasyLoading.dismiss();
             break;
           case RadioListStatus.error:
-            // TODO: display some snackbar
+            // TODO: notify the user about the error
             break;
         }
         return RadioListWidget(
