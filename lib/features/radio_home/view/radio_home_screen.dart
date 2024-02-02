@@ -6,7 +6,7 @@ import 'package:radio_app/features/radio_favorites/cubit/radio_favorites_cubit.d
 import 'package:radio_app/features/radio_favorites/radio_favorites_tab.dart';
 import 'package:radio_app/features/radio_home/cubit/radio_home_cubit.dart';
 import 'package:radio_app/features/radio_home/view/widgets/all_radios_tab.dart';
-import 'package:radio_app/theme.dart';
+import 'package:radio_app/infra/theme.dart';
 
 class RadioHomeScreen extends StatelessWidget {
   const RadioHomeScreen({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:radio_app/theme.dart';
+import 'package:radio_app/infra/theme.dart';
 
 class FadeInPageRouteTransition<T> extends PageRoute<T> {
   FadeInPageRouteTransition(this.child);

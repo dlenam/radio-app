@@ -6,8 +6,8 @@ import 'package:radio_app/common_ui/custom_network_image.dart';
 import 'package:radio_app/features/radio_favorites/cubit/radio_favorites_cubit.dart';
 import 'package:radio_app/features/radio_player/view/widgets/audio_player_widget.dart';
 import 'package:radio_app/features/widgets/favorite_icon.dart';
+import 'package:radio_app/infra/theme.dart';
 import 'package:radio_app/model/radio_station.dart';
-import 'package:radio_app/theme.dart';
 
 class RadioPlayerScreen extends StatefulWidget {
   final RadioStation radioStation;

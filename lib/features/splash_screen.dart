@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:radio_app/common_ui/custom_page_routes.dart';
 import 'package:radio_app/features/radio_home/view/radio_home_screen.dart';
-import 'package:radio_app/theme.dart';
+import 'package:radio_app/infra/theme.dart';
 
 const _fadeInLogoTime = Duration(seconds: 2);
 const _splashTime = Duration(seconds: 4);

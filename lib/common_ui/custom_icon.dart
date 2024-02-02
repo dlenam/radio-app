@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:radio_app/theme.dart';
+import 'package:radio_app/infra/theme.dart';
 
 class CustomIcon extends StatelessWidget {
   final IconData icon;

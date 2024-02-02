@@ -7,8 +7,8 @@ import 'package:radio_app/common_ui/custom_page_routes.dart';
 import 'package:radio_app/features/radio_favorites/cubit/radio_favorites_cubit.dart';
 import 'package:radio_app/features/radio_player/view/radio_player_screen.dart';
 import 'package:radio_app/features/widgets/favorite_icon.dart';
+import 'package:radio_app/infra/theme.dart';
 import 'package:radio_app/model/radio_station.dart';
-import 'package:radio_app/theme.dart';
 
 class RadioListWidget extends StatelessWidget {
   final RadioList radioList;

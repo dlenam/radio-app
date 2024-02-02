@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radio_app/common_ui/custom_icon.dart';
 import 'package:radio_app/features/radio_player/cubit/radio_player_cubit.dart';
-import 'package:radio_app/theme.dart';
+import 'package:radio_app/infra/theme.dart';
 
 class AudioVolumeSlider extends StatelessWidget {
   const AudioVolumeSlider({super.key});
