@@ -147,8 +147,11 @@ class _AnimatedListItem extends StatelessWidget {
                 RadioPlayerScreen(radioStation: radioStation),
               ),
             ),
-            leading:
-                CustomNetworkImage(imageUrl: radioStation.iconUrl, radius: 10),
+            leading: CustomNetworkImage(
+              imageUrl: radioStation.iconUrl,
+              radius: 10,
+              fixedDefaultImageWidth: 50,
+            ),
             title: Text(
               radioStation.name ?? 'Unknown station',
               overflow: TextOverflow.ellipsis,
