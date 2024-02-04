@@ -10,12 +10,12 @@ import 'package:radio_app/features/widgets/favorite_icon.dart';
 import 'package:radio_app/infra/theme.dart';
 import 'package:radio_app/model/radio_station.dart';
 
-class RadioListWidget extends StatelessWidget {
+class RadioListView extends StatelessWidget {
   final RadioList radioList;
   final ScrollController? controller;
   final bool shouldRemoveItemWhenUnfavorite;
 
-  RadioListWidget({
+  RadioListView({
     super.key,
     this.controller,
     required this.radioList,

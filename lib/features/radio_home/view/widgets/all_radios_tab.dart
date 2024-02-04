@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:radio_app/common_ui/radio_list_widget.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:radio_app/common_ui/radio_list_view.dart';
 import 'package:radio_app/features/radio_home/cubit/radio_home_cubit.dart';
 
 class AllRadiosTab extends StatefulWidget {
@@ -30,20 +31,13 @@ class _AllRadiosTabState extends State<AllRadiosTab> {
   Widget build(BuildContext context) {
     return BlocBuilder<RadioHomeCubit, RadioHomeState>(
       builder: (context, state) {
-        switch (state.status) {
-          case RadioListStatus.initial:
-          case RadioListStatus.loading:
-            EasyLoading.show(
-                status: 'loading...', maskType: EasyLoadingMaskType.black);
-            break;
-          case RadioListStatus.loaded:
-            EasyLoading.dismiss();
-            break;
-          case RadioListStatus.error:
-            // TODO: notify the user about the error
-            break;
+        // This should happen within a BlocListener
+        // But there's a weird issue with the first loading state.
+        _handleLoaderOverlay(state);
+        if (state.shouldDisplayErrorScreen) {
+          return const _ErrorScreen();
         }
-        return RadioListWidget(
+        return RadioListView(
           radioList: state.radioList,
           controller: controller,
         );
@@ -55,5 +49,51 @@ class _AllRadiosTabState extends State<AllRadiosTab> {
     if (controller.position.extentAfter < 500) {
       context.read<RadioHomeCubit>().loadMoreRadioStations();
     }
+  }
+
+  void _handleLoaderOverlay(RadioHomeState state) {
+    if (state.shouldDisplayLoading) {
+      EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black,
+      );
+      return;
+    }
+    EasyLoading.dismiss();
+  }
+}
+
+class _ErrorScreen extends StatelessWidget {
+  const _ErrorScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SvgPicture.asset(
+          'assets/no-connectivity.svg',
+          width: 200,
+        ),
+        GestureDetector(
+          onTap: () => context.read<RadioHomeCubit>().loadMoreRadioStations(),
+          child: const Column(
+            children: [
+              Icon(
+                Icons.refresh_rounded,
+                size: 60,
+              ),
+              Text(
+                'Retry',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
