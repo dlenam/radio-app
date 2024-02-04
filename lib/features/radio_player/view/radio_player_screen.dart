@@ -78,8 +78,7 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> {
               ),
             ),
             Expanded(
-              child: AudioPlayerWidget(
-                  radioStreamUrl: widget.radioStation.streamUrl),
+              child: AudioPlayerWidget(radioStation: widget.radioStation),
             ),
           ],
         ),

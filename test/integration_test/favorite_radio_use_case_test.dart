@@ -12,7 +12,7 @@ void main() {
 
   testWidgets('Favorite and unfavorite a radio', (tester) async {
     await tester.runAsync(() async {
-      await dependencyInjection(
+      await setupDependencies(
         customHttpClient: FakeHttpClient(),
         customSharedPreferences: InMemoryStorageService(),
       );

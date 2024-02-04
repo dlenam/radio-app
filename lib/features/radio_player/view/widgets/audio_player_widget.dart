@@ -5,17 +5,18 @@ import 'package:radio_app/features/radio_player/cubit/radio_player_cubit.dart';
 import 'package:radio_app/features/radio_player/view/widgets/audio_metadata_title.dart';
 import 'package:radio_app/features/radio_player/view/widgets/audio_player_button.dart';
 import 'package:radio_app/features/radio_player/view/widgets/audio_volume_slider.dart';
+import 'package:radio_app/model/radio_station.dart';
 
 class AudioPlayerWidget extends StatelessWidget {
-  final String radioStreamUrl;
+  final RadioStation radioStation;
 
-  const AudioPlayerWidget({super.key, required this.radioStreamUrl});
+  const AudioPlayerWidget({super.key, required this.radioStation});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<RadioPlayerCubit>(
-      create: (_) => GetIt.instance.get<RadioPlayerCubit>()
-        ..startStreaming(radioStreamUrl),
+      create: (_) =>
+          GetIt.instance.get<RadioPlayerCubit>()..startStreaming(radioStation),
       child: const _AudioPlayerView(),
     );
   }

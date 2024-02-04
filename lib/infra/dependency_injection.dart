@@ -14,7 +14,7 @@ import 'package:radio_app/features/radio_player/cubit/radio_player_cubit.dart';
 import 'package:radio_app/features/radio_player/data/radio_volume_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> dependencyInjection({
+Future<void> setupDependencies({
   SharedPreferences? customSharedPreferences,
   http.Client? customHttpClient,
 }) async {

@@ -5,7 +5,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:radio_app/features/radio_player/data/radio_volume_repository.dart';
+import 'package:radio_app/model/radio_station.dart';
 
 class RadioPlayerCubit extends Cubit<RadioPlayerState> {
   final AudioSession _audioSession;
@@ -31,10 +33,10 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
           ),
         );
 
-  void startStreaming(String streamUrl) async {
+  void startStreaming(RadioStation radioStation) async {
     try {
       await _configureRadio(
-        streamUrl: streamUrl,
+        radioStation: radioStation,
         audioPlayer: _audioPlayer,
         audioSession: _audioSession,
       );
@@ -48,12 +50,25 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
   }
 
   Future<void> _configureRadio({
-    required String streamUrl,
+    required RadioStation radioStation,
     required AudioSession audioSession,
     required AudioPlayer audioPlayer,
   }) async {
     await audioSession.configure(const AudioSessionConfiguration.speech());
-    await audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(streamUrl)));
+    await audioPlayer.setAudioSource(
+      AudioSource.uri(
+        Uri.parse(radioStation.streamUrl),
+        tag: MediaItem(
+          // Specify a unique ID for each media item:
+          id: radioStation.id,
+          // Metadata to display in the notification:
+          title: radioStation.name != null
+              ? radioStation.name!
+              : 'Unknown station',
+          artUri: Uri.parse(radioStation.iconUrl),
+        ),
+      ),
+    );
     final initialVolume = _radioVolumeRepository.getVolume();
     if (initialVolume != null) {
       audioPlayer.setVolume(initialVolume);
