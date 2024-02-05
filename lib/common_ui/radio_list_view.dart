@@ -56,9 +56,6 @@ class RadioListView extends StatelessWidget {
                     isFavorite: isFavorite,
                     radioFavoritesCubit: context.read<RadioFavoritesCubit>(),
                   );
-                  final scaffold = ScaffoldMessenger.of(context);
-                  scaffold.clearSnackBars();
-                  scaffold.showSnackBar(_buildSnackBar(isFavorite));
                 },
               );
             },
@@ -166,22 +163,3 @@ class _AnimatedListItem extends StatelessWidget {
     );
   }
 }
-
-SnackBar _buildSnackBar(bool isFavorite) => SnackBar(
-      backgroundColor: appTheme.primaryColor,
-      content: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Center(
-          child: Text(
-            isFavorite ? 'Removed from favorites!' : 'Added to favourites!',
-            style: const TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
-      duration: const Duration(milliseconds: 1500),
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-    );

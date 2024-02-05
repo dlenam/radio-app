@@ -29,11 +29,13 @@ class _AllRadiosTabState extends State<AllRadiosTab> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RadioHomeCubit, RadioHomeState>(
+    return BlocConsumer<RadioHomeCubit, RadioHomeState>(
+      listener: (BuildContext context, RadioHomeState state) {
+        _errorSnackBarHandler(state);
+      },
       builder: (context, state) {
-        // This should happen within a BlocListener
-        // But there's a weird issue with the first loading state.
-        _handleLoaderOverlay(state);
+        // This should happen within the listener. But there's a weird issue with the first loading state.
+        _loaderOverlayHandler(state);
         if (state.shouldDisplayErrorScreen) {
           return const _ErrorScreen();
         }
@@ -51,7 +53,7 @@ class _AllRadiosTabState extends State<AllRadiosTab> {
     }
   }
 
-  void _handleLoaderOverlay(RadioHomeState state) {
+  void _loaderOverlayHandler(RadioHomeState state) {
     if (state.shouldDisplayLoading) {
       EasyLoading.show(
         status: 'loading...',
@@ -60,6 +62,14 @@ class _AllRadiosTabState extends State<AllRadiosTab> {
       return;
     }
     EasyLoading.dismiss();
+  }
+
+  void _errorSnackBarHandler(RadioHomeState state) {
+    if (state.shouldDisplayErrorSnackBar) {
+      final scaffold = ScaffoldMessenger.of(context);
+      scaffold.clearSnackBars();
+      scaffold.showSnackBar(_buildErrorSnackBar());
+    }
   }
 }
 
@@ -97,3 +107,20 @@ class _ErrorScreen extends StatelessWidget {
     );
   }
 }
+
+SnackBar _buildErrorSnackBar() => SnackBar(
+      content: const Padding(
+        padding: EdgeInsets.symmetric(vertical: 12),
+        child: Center(
+          child: Text(
+            'Error retrieving more radios',
+          ),
+        ),
+      ),
+      duration: const Duration(milliseconds: 1500),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    );

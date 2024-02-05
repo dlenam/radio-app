@@ -18,7 +18,10 @@ class RadioHomeCubit extends Cubit<RadioHomeState> {
     emit(RadioHomeState.loading(radioList: state.radioList));
     try {
       final results = await Future.wait([
-        _radioStationRepository.loadMoreAndGetRadioStations(),
+        _radioStationRepository
+            .loadMoreAndGetRadioStations()
+            // We timeout in case there's no internet connectivity or any other infinite Future error happens.
+            .timeout(const Duration(seconds: 5)),
         // Fake duration to see the loader
         Future.delayed(const Duration(seconds: 1))
       ]);
@@ -51,6 +54,9 @@ class RadioHomeState extends Equatable {
 
   bool get shouldDisplayErrorScreen =>
       status == RadioListStatus.error && radioList.isEmpty;
+
+  bool get shouldDisplayErrorSnackBar =>
+      status == RadioListStatus.error && radioList.isNotEmpty;
 
   bool get shouldDisplayLoading =>
       status == RadioListStatus.loading || status == RadioListStatus.initial;

@@ -46,58 +46,101 @@ class RadioHomeContent extends StatefulWidget {
 class _RadioHomeContentState extends State<RadioHomeContent> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      initialIndex: 0,
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: appTheme.standardBackgroundColor,
-          title: Text(
-            'Radios',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: appTheme.primaryColor,
-            ),
-          ),
-          // The elevation value of the app bar when scroll view has
-          // scrolled underneath the app bar.
-          scrolledUnderElevation: 4.0,
-          shadowColor: appTheme.primaryColor,
-          bottom: TabBar(
-            indicatorColor: appTheme.primaryColor,
-            labelColor: appTheme.primaryColor,
-            tabs: const [
-              Tab(
-                text: 'All',
-                icon: CustomIcon(icon: Icons.radio),
-              ),
-              Tab(
-                text: 'Favorites',
-                icon: CustomIcon(icon: Icons.favorite),
-              ),
-            ],
-          ),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<RadioFavoritesCubit, RadioFavoritesState>(
+          listenWhen: (previous, current) =>
+              previous.wasAFavoriteAdded(current),
+          listener: (context, state) {
+            _showFavoriteSnackBar(context, true);
+          },
         ),
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                appTheme.secondaryColor,
-                appTheme.primaryColor,
-                appTheme.secondaryColor,
+        BlocListener<RadioFavoritesCubit, RadioFavoritesState>(
+          listenWhen: (previous, current) =>
+              previous.wasAFavoriteRemoved(current),
+          listener: (context, state) {
+            _showFavoriteSnackBar(context, false);
+          },
+        ),
+      ],
+      child: DefaultTabController(
+        initialIndex: 0,
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: appTheme.standardBackgroundColor,
+            title: Text(
+              'Radios',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: appTheme.primaryColor,
+              ),
+            ),
+            // The elevation value of the app bar when scroll view has
+            // scrolled underneath the app bar.
+            scrolledUnderElevation: 4.0,
+            shadowColor: appTheme.primaryColor,
+            bottom: TabBar(
+              indicatorColor: appTheme.primaryColor,
+              labelColor: appTheme.primaryColor,
+              tabs: const [
+                Tab(
+                  text: 'All',
+                  icon: CustomIcon(icon: Icons.radio),
+                ),
+                Tab(
+                  text: 'Favorites',
+                  icon: CustomIcon(icon: Icons.favorite),
+                ),
               ],
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
             ),
           ),
-          child: const TabBarView(
-            children: [
-              AllRadiosTab(),
-              RadioFavoritesTab(),
-            ],
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  appTheme.secondaryColor,
+                  appTheme.primaryColor,
+                  appTheme.secondaryColor,
+                ],
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+              ),
+            ),
+            child: const TabBarView(
+              children: [
+                AllRadiosTab(),
+                RadioFavoritesTab(),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
+  void _showFavoriteSnackBar(BuildContext context, bool wasAFavoriteAdded) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.clearSnackBars();
+    scaffold.showSnackBar(_buildSnackBar(wasAFavoriteAdded));
+  }
 }
+
+SnackBar _buildSnackBar(bool isFavorite) => SnackBar(
+      backgroundColor: appTheme.primaryColor,
+      content: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Center(
+          child: Text(
+            isFavorite ? 'Added to favourites!' : 'Removed from favorites!',
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+      duration: const Duration(milliseconds: 1500),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    );

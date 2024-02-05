@@ -55,6 +55,11 @@ class RadioFavoritesState extends Equatable {
     return false;
   }
 
+  bool wasAFavoriteAdded(RadioFavoritesState nextState) =>
+      nextState.favoriteList.length > favoriteList.length;
+  bool wasAFavoriteRemoved(RadioFavoritesState nextState) =>
+      nextState.favoriteList.length < favoriteList.length;
+
   @override
   List<Object?> get props => [favoriteList];
 }
